@@ -1,7 +1,10 @@
 import React from 'react';
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
-import Axios from "axios";
+import UsuarioService from "../app/service/usuarioService";
+import LocalStorageService from "../app/service/localStorageService";
+import {mensagemErro} from '../components/toast';
+
 import {withRouter} from "react-router-dom";
 
 class Login extends React.Component{
@@ -9,18 +12,27 @@ class Login extends React.Component{
     state = {
         email: '',
         senha: ''
+        // mensagemErro = null
+    }
+
+    constructor( ) {
+        super();//Must use this super() because I extend from React.Component
+        this.service = new UsuarioService();
     }
 
     entrar = () => {
-        Axios
-            .post('http://localhost:8080/api/usuarios/autenticar', {
-                email: this.state.email,
-                senha: this.state.senha
+        this.service.autenticar({
+            email: this.state.email,
+            senha: this.state.senha
         }).then(response => {
-            console.log(response);
+            console.log(response);//REMOVER
+            LocalStorageService.adicionarItem('_usuario_logado', response.data);
+            this.props.history.push('/home')
         }).catch(erro => {
-            console.log(erro.response);
-        })
+            console.log(erro.response);//REMOVER
+            mensagemErro(erro.response.data)
+            //this.setState({mensagemErro: erro.response.data});
+        });
     }
 
     prepareCadastrar = () => {

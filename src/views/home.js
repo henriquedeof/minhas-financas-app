@@ -1,9 +1,31 @@
 import React from "react";
+import UsuarioService from "../app/service/usuarioService";
+import LocalStorageService from "../app/service/localStorageService";
 
 class Home extends React.Component{
 
     state = {
         saldo: 0
+    }
+
+    constructor( ) {
+        super();//Must use this super() because I extend from React.Component
+        this.usuarioService = new UsuarioService();
+    }
+
+    //executado depois que o componente eh renderizado no DOM
+    componentDidMount() {
+        const usuarioLogado = LocalStorageService.obterItem('_usuario_logado');
+
+        //Line below I am using "crase". It transformed my String into a String Template (ECMA Script). It helps to concat information in that String
+        //Axios.get(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/saldo`)
+
+        this.usuarioService.obterSaldoPorUsuario(usuarioLogado.id)
+            .then(response => {
+                this.setState({saldo: response.data});
+            }).catch(error => {
+                console.error(error.response);
+            });
     }
 
     render() {
