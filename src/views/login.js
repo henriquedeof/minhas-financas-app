@@ -4,6 +4,7 @@ import FormGroup from '../components/form-group';
 import UsuarioService from "../app/service/usuarioService";
 import LocalStorageService from "../app/service/localStorageService";
 import {mensagemErro} from '../components/toast';
+import {AuthContext} from "../main/ProvedorAutenticacao";
 
 import {withRouter} from "react-router-dom";
 
@@ -27,6 +28,7 @@ class Login extends React.Component{
         }).then(response => {
             console.log(response);//REMOVER
             LocalStorageService.adicionarItem('_usuario_logado', response.data);
+            this.context.iniciarSessao(response.data);
             this.props.history.push('/home')
         }).catch(erro => {
             console.log(erro.response);//REMOVER
@@ -57,8 +59,8 @@ class Login extends React.Component{
                                                 <input type="password" value={this.state.senha} onChange={e => this.setState({senha: e.target.value})}
                                                        className="form-control" id="exampleInputPassword1" placeholder="Password" />
                                             </FormGroup>
-                                            <button onClick={ this.entrar } className="btn btn-success">Entrar</button>
-                                            <button onClick={this.prepareCadastrar} className="btn btn-danger">Cadastrar</button>
+                                            <button onClick={ this.entrar } className="btn btn-success"><i className="pi pi-sign-in" /> Entrar</button>
+                                            <button onClick={this.prepareCadastrar} className="btn btn-danger"><i className="pi pi-plus" /> Cadastrar</button>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -72,4 +74,5 @@ class Login extends React.Component{
 
 }
 
+Login.contextType = AuthContext;
 export default withRouter(Login);

@@ -23,21 +23,15 @@ class CadastroUsuario extends React.Component{
     cadastrar = () => {
         //console.log(this.state)
 
-        const msgs = this.validar();
+        const { nome, email, senha, senhaRepeticao } = this.state;
+        const usuario = { nome, email, senha, senhaRepeticao };
 
-        if(msgs && msgs.length > 0){
-            msgs.forEach((msg, index) => {
-                mensagemErro(msg);
-            });
-            return false; //Does not execute the rest of the method (method stops here).
-        }
-
-
-
-        const usuario = {
-            nome: this.state.nome,
-            email: this.state.email,
-            senha: this.state.senha
+        try{
+            this.service.validarUsuario(usuario);
+        }catch (erro) {
+            const msgs = erro.mensagens;
+            msgs.forEach(msg => mensagemErro(msg));
+            return false; //Do not execute the rest of the code
         }
 
         this.service.salvar(usuario)
@@ -47,28 +41,6 @@ class CadastroUsuario extends React.Component{
             }).catch(erro => {
                 mensagemErro(erro.response.data);
             })
-    }
-
-    validar(){
-        const msgs = [];
-
-        if(!this.state.nome){
-            msgs.push('O campo Nome eh obrigatorio');
-        }
-
-        if(!this.state.email){
-            msgs.push('O campo Email eh obrigatorio');
-        }else if(!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
-            msgs.push('Informe Email valido');
-        }
-
-        if(!this.state.senha || !this.state.senhaRepeticao){
-            msgs.push('Digite a senha 2x');
-        }else if(this.state.senha !== this.state.senhaRepeticao){
-            msgs.push('As senhas nao sao iguais');
-        }
-
-        return msgs;
     }
 
     cancelar = () => {
@@ -107,8 +79,8 @@ class CadastroUsuario extends React.Component{
                                        placeholder="Repita a senha" />
                             </FormGroup>
 
-                            <button onClick={this.cadastrar} type="button" className="btn btn-success">Salvar</button>
-                            <button onClick={this.cancelar} type="button" className="btn btn-danger">Cancelar</button>
+                            <button onClick={this.cadastrar} type="button" className="btn btn-success"><i className="pi pi-save" /> Salvar</button>
+                            <button onClick={this.cancelar} type="button" className="btn btn-danger"><i className="pi pi-times" /> Cancelar</button>
 
                         </div>
                     </div>
