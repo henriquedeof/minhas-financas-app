@@ -59,8 +59,8 @@ class Login extends React.Component{
                                                 <input type="password" value={this.state.senha} onChange={e => this.setState({senha: e.target.value})}
                                                        className="form-control" id="exampleInputPassword1" placeholder="Password" />
                                             </FormGroup>
-                                            <button onClick={ this.entrar } className="btn btn-success"><i className="pi pi-sign-in" /> Entrar</button>
-                                            <button onClick={this.prepareCadastrar} className="btn btn-danger"><i className="pi pi-plus" /> Cadastrar</button>
+                                            <button onClick={ this.entrar } className="btn btn-success"><i className="pi pi-sign-in" /> Entrar1</button>
+                                            <button onClick={this.prepareCadastrar} className="btn btn-danger"><i className="pi pi-plus" /> Cadastrar1</button>
                                         </fieldset>
                                     </div>
                                 </div>
